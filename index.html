@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,7 +14,7 @@
     justify-content: center;
     align-items: center;
     font-family: "Poppins", sans-serif;
-    background: #f2f2f2; /* simple background color */
+    background: #f2f2f2;
   }
 
   .login-box {
@@ -41,7 +42,6 @@
     background: #fff;
     color: #333;
     font-size: 14px;
-    transition: 0.3s;
   }
 
   input::placeholder {
@@ -63,7 +63,6 @@
     font-weight: bold;
     margin-top: 10px;
     width: 100%;
-    transition: background 0.3s ease-in-out, transform 0.2s;
   }
 
   button:hover {
@@ -83,27 +82,52 @@
 
 <div class="login-box">
   <h2>Student Login</h2>
-  <input type="text" id="username" placeholder="Username" required>
-  <input type="password" id="password" placeholder="Password" required>
+
+  <input type="text" id="username" placeholder="Enter Username" required>
+  <input type="password" id="password" placeholder="Enter Password" required>
+
   <button onclick="login()">Login</button>
+
 </div>
 
 <script>
+
 function login() {
+
   const username = document.getElementById('username').value.trim();
   const password = document.getElementById('password').value.trim();
 
   if (username && password) {
-    localStorage.setItem('username', username);
 
-    // Redirect to second website
+    // Save username
+    localStorage.setItem("studentName", username);
+
+    // Save login time
+    const loginTime = new Date().toLocaleString();
+    localStorage.setItem("loginTime", loginTime);
+
+    // Save login history
+    let users = JSON.parse(localStorage.getItem("loginUsers")) || [];
+
+    users.push({
+      name: username,
+      time: loginTime
+    });
+
+    localStorage.setItem("loginUsers", JSON.stringify(users));
+
+    // Redirect to your student hub
     window.location.href = "https://npulapa.github.io/student-hub/";
 
-  } else {
-    alert('Please enter both username and password.');
+  } 
+  else {
+    alert("Please enter both username and password.");
   }
+
 }
+
 </script>
 
 </body>
 </html>
+```
