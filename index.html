@@ -7,49 +7,42 @@
 <title>Student Login</title>
 
 <style>
-  body {
-    margin: 0;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: "Poppins", sans-serif;
-    background: #f2f2f2;
-  }
+body{
+margin:0;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+font-family:Poppins;
+background:#f2f2f2;
+}
 
-  .login-box {
-    background: rgba(255, 255, 255, 0.9);
-    padding: 40px 35px;
-    border-radius: 15px;
-    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.2);
-    width: 300px;
-    text-align: center;
-  }
+.login-box{
+background:white;
+padding:40px;
+border-radius:15px;
+box-shadow:0 4px 25px rgba(0,0,0,0.2);
+width:300px;
+text-align:center;
+}
 
-  h2 {
-    margin-bottom: 20px;
-    color: #333;
-  }
+input{
+width:100%;
+margin:10px 0;
+padding:10px;
+border-radius:8px;
+border:1px solid #ccc;
+}
 
-  input {
-    display: block;
-    width: 100%;
-    margin: 12px 0;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-  }
-
-  button {
-    background: linear-gradient(135deg, #00b4d8, #6c63ff);
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 8px;
-    cursor: pointer;
-    width: 100%;
-  }
-
+button{
+background:linear-gradient(135deg,#00b4d8,#6c63ff);
+color:white;
+border:none;
+padding:10px;
+border-radius:8px;
+width:100%;
+cursor:pointer;
+}
 </style>
 
 </head>
@@ -57,39 +50,52 @@
 <body>
 
 <div class="login-box">
-  <h2>Student Login</h2>
 
-  <input type="text" id="username" placeholder="Enter Username">
-  <input type="password" id="password" placeholder="Enter Password">
+<h2>Student Login</h2>
 
-  <button onclick="login()">Login</button>
+<input type="text" id="username" placeholder="Enter Username">
+<input type="password" id="password" placeholder="Enter Password">
+
+<button onclick="login()">Login</button>
 
 </div>
 
-<script>
 
-function login(){
+<script type="module">
 
-let username = document.getElementById("username").value.trim();
-let password = document.getElementById("password").value.trim();
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyC5GHlCusznXZ-mMe_I86l8QhenPxXDdgA",
+  authDomain: "student-login-tracker-40716.firebaseapp.com",
+  projectId: "student-login-tracker-40716",
+  storageBucket: "student-login-tracker-40716.firebasestorage.app",
+  messagingSenderId: "732329668836",
+  appId: "1:732329668836:web:51951a1cf63de6c3767cf1",
+  measurementId: "G-GK095BM7XS"
+};
+
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+
+window.login = async function(){
+
+let username=document.getElementById("username").value.trim();
+let password=document.getElementById("password").value.trim();
 
 if(username && password){
 
-let time = new Date().toLocaleString();
+let time=new Date().toLocaleString();
 
-// get old login data
-let users = JSON.parse(localStorage.getItem("loginUsers")) || [];
-
-// add new login
-users.push({
-name: username,
-time: time
+await addDoc(collection(db,"logins"),{
+name:username,
+time:time
 });
 
-// save again
-localStorage.setItem("loginUsers", JSON.stringify(users));
-
-// redirect
 window.location.href="https://npulapa.github.io/student-hub/";
 
 }
