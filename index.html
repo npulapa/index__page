@@ -24,7 +24,6 @@
     box-shadow: 0 4px 25px rgba(0, 0, 0, 0.2);
     width: 300px;
     text-align: center;
-    animation: fadeIn 1s ease-in-out;
   }
 
   h2 {
@@ -39,18 +38,6 @@
     padding: 10px;
     border-radius: 8px;
     border: 1px solid #ccc;
-    background: #fff;
-    color: #333;
-    font-size: 14px;
-  }
-
-  input::placeholder {
-    color: #888;
-  }
-
-  input:focus {
-    border-color: #00b4d8;
-    outline: none;
   }
 
   button {
@@ -60,20 +47,9 @@
     padding: 10px 15px;
     border-radius: 8px;
     cursor: pointer;
-    font-weight: bold;
-    margin-top: 10px;
     width: 100%;
   }
 
-  button:hover {
-    background: linear-gradient(135deg, #0096c7, #4b47d1);
-    transform: scale(1.03);
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
 </style>
 
 </head>
@@ -83,8 +59,8 @@
 <div class="login-box">
   <h2>Student Login</h2>
 
-  <input type="text" id="username" placeholder="Enter Username" required>
-  <input type="password" id="password" placeholder="Enter Password" required>
+  <input type="text" id="username" placeholder="Enter Username">
+  <input type="password" id="password" placeholder="Enter Password">
 
   <button onclick="login()">Login</button>
 
@@ -92,37 +68,34 @@
 
 <script>
 
-function login() {
+function login(){
 
-  const username = document.getElementById('username').value.trim();
-  const password = document.getElementById('password').value.trim();
+let username = document.getElementById("username").value.trim();
+let password = document.getElementById("password").value.trim();
 
-  if (username && password) {
+if(username && password){
 
-    // Save username
-    localStorage.setItem("studentName", username);
+let time = new Date().toLocaleString();
 
-    // Save login time
-    const loginTime = new Date().toLocaleString();
-    localStorage.setItem("loginTime", loginTime);
+// get old login data
+let users = JSON.parse(localStorage.getItem("loginUsers")) || [];
 
-    // Save login history
-    let users = JSON.parse(localStorage.getItem("loginUsers")) || [];
+// add new login
+users.push({
+name: username,
+time: time
+});
 
-    users.push({
-      name: username,
-      time: loginTime
-    });
+// save again
+localStorage.setItem("loginUsers", JSON.stringify(users));
 
-    localStorage.setItem("loginUsers", JSON.stringify(users));
+// redirect
+window.location.href="https://npulapa.github.io/student-hub/";
 
-    // Redirect to your student hub
-    window.location.href = "https://npulapa.github.io/student-hub/";
-
-  } 
-  else {
-    alert("Please enter both username and password.");
-  }
+}
+else{
+alert("Please enter username and password");
+}
 
 }
 
