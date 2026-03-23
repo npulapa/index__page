@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,7 +12,7 @@ height:100vh;
 display:flex;
 justify-content:center;
 align-items:center;
-font-family:Poppins;
+font-family:Poppins, sans-serif;
 background:#f2f2f2;
 }
 
@@ -24,6 +23,10 @@ border-radius:15px;
 box-shadow:0 4px 25px rgba(0,0,0,0.2);
 width:300px;
 text-align:center;
+}
+
+h2{
+margin-bottom:20px;
 }
 
 input{
@@ -42,7 +45,13 @@ padding:10px;
 border-radius:8px;
 width:100%;
 cursor:pointer;
+font-size:16px;
 }
+
+button:hover{
+opacity:0.9;
+}
+
 </style>
 
 </head>
@@ -56,52 +65,72 @@ cursor:pointer;
 <input type="text" id="username" placeholder="Enter Username">
 <input type="password" id="password" placeholder="Enter Password">
 
-<button onclick="login()">Login</button>
+<button onclick="login()" id="loginBtn">Login</button>
 
 </div>
 
 
 <script type="module">
 
+// Firebase imports
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-
+// Your Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyC5GHlCusznXZ-mMe_I86l8QhenPxXDdgA",
   authDomain: "student-login-tracker-40716.firebaseapp.com",
   projectId: "student-login-tracker-40716",
   storageBucket: "student-login-tracker-40716.firebasestorage.app",
   messagingSenderId: "732329668836",
-  appId: "1:732329668836:web:51951a1cf63de6c3767cf1",
-  measurementId: "G-GK095BM7XS"
+  appId: "1:732329668836:web:51951a1cf63de6c3767cf1"
 };
 
-
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-
+// Login function
 window.login = async function(){
 
-let username=document.getElementById("username").value.trim();
-let password=document.getElementById("password").value.trim();
+let username = document.getElementById("username").value.trim();
+let password = document.getElementById("password").value.trim();
+let btn = document.getElementById("loginBtn");
 
-if(username && password){
+// Validation
+if(!username || !password){
+    alert("Please enter username and password");
+    return;
+}
 
-let time=new Date().toLocaleString();
+btn.innerText = "Logging in...";
+btn.disabled = true;
 
+try{
+
+let time = new Date().toLocaleString();
+
+// Save to Firestore
 await addDoc(collection(db,"logins"),{
-name:username,
-time:time
+    name: username,
+    time: time
 });
 
-window.location.href="https://npulapa.github.io/student-hub/";
+// Success
+alert("Login Successful!");
+
+// Redirect to your main site
+window.location.href = "https://npulapa.github.io/student-hub/";
 
 }
-else{
-alert("Please enter username and password");
+catch(error){
+    console.error(error);
+    alert("Error: Check Firebase rules or internet connection");
 }
+
+// Reset button
+btn.innerText = "Login";
+btn.disabled = false;
 
 }
 
@@ -109,4 +138,3 @@ alert("Please enter username and password");
 
 </body>
 </html>
-```
